@@ -17,9 +17,24 @@ export class DataService {
 
   constructor(private http: Http) { }
 
+  insertTodo(x: any) {
+    return this.http.post('http://localhost:5555/api/todo/insert', x)
+      .map((response: Response) => {
+        const status = response.text();
+        return status;
+      }
+      )
+      .catch(
+      (error: Response) => {
+        console.log('catch error');
+        return Observable.throw('Something went wrong');
+      }
+      );
+  }
+
   updateTodo(x: any) {
     // const body = JSON.stringify(x);
-    return this.http.post('http://localhost:4546/api/todo/update', x)
+    return this.http.post('http://localhost:5555/api/todo/update', x)
       .map((response: Response) => {
         const status = response.text();
         return status;
@@ -67,7 +82,7 @@ export class DataService {
 
   getUserTodo(): Observable<any> {
 
-    return this.http.get('http://localhost:4546/api/todos/userId/5a31132d446641324c191234')
+    return this.http.get('http://localhost:5555/api/todos/userId/5a31132d446641324c191234')
       .map((response: Response) => {
         const users = response.json();
         return users;

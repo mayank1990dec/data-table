@@ -1,35 +1,26 @@
 <p-dataTable [value]="todos" [editable]="true" resizableColumns="true" [paginator]="true" [rows]="20">
   <p-column field="_id" header="id" [editable]="true"></p-column>
-
   <p-column field="userId" header="userId" [editable]="true"></p-column>
   <p-column field="todo" header="todo" [editable]="true"></p-column>
   <p-column field="hasAttachment" header="hasAttachment" [editable]="true">
-    <ng-template let-col let-car="rowData" pTemplate="editor">
-      <p-dropdown [(ngModel)]="car[col.field]" (onChange)="onRowClick($event, col , car)" [options]="hasAttachStatus" [autoWidth]="false"
+    <ng-template let-col let-todo="rowData" pTemplate="editor">
+      <p-dropdown [(ngModel)]="todo[col.field]" (onChange)="onRowClick($event, col , todo)" [options]="hasAttachStatus" [autoWidth]="false"
         [style]="{'width':'100%'}" required="true" appendTo="body"></p-dropdown>
     </ng-template>
   </p-column>
   <p-column field="isDone" header="isDone" [editable]="false">
-    <ng-template let-col let-car="rowData" pTemplate="editor">
-      <p-dropdown [(ngModel)]="car[col.field]" [options]="hasAttachStatus" [autoWidth]="false" [style]="{'width':'100%'}" required="true"
+    <ng-template let-col let-todo="rowData" pTemplate="editor">
+      <p-dropdown [(ngModel)]="todo[col.field]" [options]="hasAttachStatus" [autoWidth]="false" [style]="{'width':'100%'}" required="true"
         appendTo="body"></p-dropdown>
     </ng-template>
   </p-column>
-  <!-- <p-column field="creationDate" header="Creation Date" [editable]="true" [style]=" {'overflow':'visible' }">
-      <ng-template let-col let-car="rowData" pTemplate="body">
-        {{car[col.field]|date }}
-      </ng-template>
-      <ng-template let-col let-car="rowData" pTemplate="editor">
-        <p-calendar [(ngModel)]="car[col.field]" appendTo="body"></p-calendar>
-      </ng-template>
-    </p-column> -->
 
   <p-column field="completionDate" header="Completion Date" [editable]="false" [style]=" {'overflow':'visible' }">
-    <ng-template let-col let-car="rowData" pTemplate="body">
-      {{car[col.field]|date }}
+    <ng-template let-col let-todo="rowData" pTemplate="body">
+      {{todo[col.field]|date }}
     </ng-template>
-    <ng-template let-col let-car="rowData" pTemplate="editor">
-      <p-calendar [(ngModel)]="car[col.field]" appendTo="body"></p-calendar>
+    <ng-template let-col let-todo="rowData" pTemplate="editor">
+      <p-calendar [(ngModel)]="todo[col.field]" appendTo="body"></p-calendar>
     </ng-template>
   </p-column>
 
@@ -42,49 +33,20 @@
 </p-dataTable>
 
 <div class="ui-grid ui-grid-responsive ui-grid-pad" *ngIf="true" style="font-size:16px;text-align:center;padding:20px">
-
-  <div class="ui-grid-row">
-    <div class="ui-grid-col-4">Todo: </div>
-    <div>
-      <input type="text" id="todo">
-    </div>
-  </div>
-  <div class="ui-grid-row">
-    <div class="ui-grid-col-4">Attachment: </div>
-    <p-dropdown [options]="hasAttachStatus" [(ngModel)]="selectedStatus"></p-dropdown>
-  </div>
-</div>
-
-
-<p-dialog header="Add Todo" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="350"
-  (onAfterHide)="onDialogHide()">
-  <form (ngSubmit)="saveAddedTodo(this)">
-    <div class="form-group  ui-grid-row">
-      <label for="Todo">Todo</label>
-      <input class="form-control" type="text" id="todo" [(ngModel)]="temp" [ngModelOptions]="{standalone: true}">
-    </div>
-
-    <div class="form-group ui-grid-row">
-      <label for="hasAttachment">Attachment</label>
-      <p-dropdown class="form-control" [options]="hasAttachStatus" [(ngModel)]="selectedStatus" [ngModelOptions]="{standalone: true}"></p-dropdown>
-    </div>
-    <button class="btn btn-primary" type="submit">Save Todo</button>
-  </form>
-</p-dialog>
-
-<!-- 
-  <div class="ui-grid ui-grid-responsive ui-grid-pad" *ngIf="displayDialog" style="font-size:16px;text-align:center;padding:20px">
-
-    <div class="ui-grid-row">
-      <div class="ui-grid-col-4">Todo: </div>
-      <div>
-          <input type="text" id="todo">
+  <p-dialog header="Add Todo" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="350"
+    (onAfterHide)="onDialogHide()">
+    <form (ngSubmit)="saveAddedTodo(this)" style="height:250px">
+      <div class="form-group">
+        <label for="Todo">Todo:</label>
+        <input type="text" class="form-control" pInputText id="todo" [(ngModel)]="addedTodo.todo" [ngModelOptions]="{standalone: true}">
       </div>
-    </div>
-    <div class="ui-grid-row">
-      <div class="ui-grid-col-4">Attachment: </div>
-      <div class="ui-grid-col-4"></div>
-      <p-dropdown [options]="hasAttachStatus" [(ngModel)]="selectedStatus"></p-dropdown>
-    </div>
-  </div>
- -->
+      <div class="form-group">
+        <label for="hasAttachment">Attachment:</label>
+        <!-- <p-dropdown class="form-control" [options]="hasAttachStatus" [(ngModel)]="addedTodo.hasAttachment" [ngModelOptions]="{standalone: true}"></p-dropdown> -->
+        <p-dropdown [options]="hasAttachStatus" [(ngModel)]="addedTodo.hasAttachment" [style]="{'width':'150px'}" editable="true"
+          [ngModelOptions]="{standalone: true}" placeholder="Select Starus"></p-dropdown>
+      </div>
+
+      <button type="submit" pButton icon="fa-check" (click)="save()" label="Save"></button>
+    </form>
+  </p-dialog>
